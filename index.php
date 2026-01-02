@@ -14,7 +14,7 @@ $expense_query = "SELECT SUM(amount) as total FROM transactions t
                   WHERE c.type = 'expense'";
 $expense_result = $conn->query($expense_query);
 $expense_row = $expense_result->fetch_assoc();
-$total_expense = $expense_row['total' ?? 0];
+$total_expense = $expense_row['total'] ?? 0;
 
 $balance = $total_income - $total_expense;
 ?>
