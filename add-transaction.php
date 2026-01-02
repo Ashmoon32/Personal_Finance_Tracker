@@ -74,5 +74,13 @@ $cat_result = $conn->query($cat_query);
         </div>
     </div>
 </div>
-
+<script>
+    document.getElementById('transactionForm').addEventListener('submit', function(e) {
+    const amount = document.querySelector('input[name="amount"]').value;
+    if (amount <= 0) {
+        alert("Please enter an amount greater than zero.");
+        e.preventDefault(); // This stops the form from submitting
+    }
+});
+</script>
 <?php include 'includes/footer.php'; ?>

@@ -46,4 +46,58 @@ $balance = $total_income - $total_expense;
     </div>
 </div>
 
+<?php
+// 3. Fetch all transactions (Join with categories to get the name)
+$history_query = "SELECT t.*, c.name as category_name, c.type 
+                  FROM transactions t 
+                  JOIN categories c ON t.category_id = c.id 
+                  ORDER BY t.transaction_date DESC";
+$history_result = $conn->query($history_query);
+?>
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Recent Transactions</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while($row = $history_result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo $row['transaction_date']; ?></td>
+                            <td><?php echo htmlspecialchars($row['description']); ?></td>
+                            <td>
+                                <span class="badge bg-secondary"><?php echo $row['category_name']; ?></span>
+                            </td>
+                            <td class="<?php echo $row['type'] == 'income' ? 'text-success' : 'text-danger'; ?>">
+                                <strong>
+                                    <?php echo $row['type'] == 'income' ? '+' : '-'; ?>
+                                    $<?php echo number_format($row['amount'], 2); ?>
+                                </strong>
+                            </td>
+                            <td>
+                                <a href="delete-transaction.php?id=<?php echo $row['id']; ?>" 
+                                   class="btn btn-sm btn-outline-danger" 
+                                   onclick="return confirm('Are you sure?')">
+                                   <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <?php include 'includes/footer.php'; ?>
