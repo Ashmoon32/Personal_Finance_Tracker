@@ -1,6 +1,9 @@
 <?php
+session_start(); // Always the absolute first line
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once 'config/db.php';
-session_start(); // Start the session to track the user
 
 if (isset($_POST['login'])) {
     $email = $_POST['email'];

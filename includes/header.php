@@ -16,9 +16,15 @@
                 FinanaceTracker
             </a>
                 <div class="navbar-nav ms-auto">
-                    <a href="index.php" class="nav-link">Dashboard</a>
-                    <a href="add-transaction.php" class="nav-link">Add Transaction</a>
-                </div>
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <a href="index.php" class="nav-link">Dashboard</a>
+        <a href="add-transaction.php" class="nav-link">Add Transaction</a>
+        <a href="logout.php" class="nav-link text-warning">Logout</a>
+    <?php else: ?>
+        <a href="login.php" class="nav-link">Login</a>
+        <a href="register.php" class="nav-link">Register</a>
+    <?php endif; ?>
+</div>
         </div>
     </nav>
     <div class="container">
