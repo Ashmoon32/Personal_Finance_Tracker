@@ -1,6 +1,13 @@
 <?php
+session_start();
 require_once 'config/db.php';
 include 'includes/header.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+$user_id = $_SESSION['user_id']; // Use the logged-in ID instead of 1!
 
 $income_query = "SELECT SUM(amount) as total FROM transactions t 
                  JOIN categories c ON t.category_id = c.id 
@@ -12,6 +19,13 @@ $total_income = $income_row['total'] ?? 0;
 $expense_query = "SELECT SUM(amount) as total FROM transactions t 
                   JOIN categories c ON t.category_id = c.id 
                   WHERE c.type = 'expense'";
+                  
+$history_query = "SELECT t.*, c.name as category_name, c.type 
+                  FROM transactions t 
+                  JOIN categories c ON t.category_id = c.id 
+                  WHERE t.user_id = $user_id 
+                  ORDER BY t.transaction_date DESC";
+
 $expense_result = $conn->query($expense_query);
 $expense_row = $expense_result->fetch_assoc();
 $total_expense = $expense_row['total'] ?? 0;
@@ -54,6 +68,8 @@ $history_query = "SELECT t.*, c.name as category_name, c.type
                   ORDER BY t.transaction_date DESC";
 $history_result = $conn->query($history_query);
 ?>
+
+
 
 <div class="card shadow-sm mt-4">
     <div class="card-header bg-white">

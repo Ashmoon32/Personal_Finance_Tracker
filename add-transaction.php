@@ -1,5 +1,12 @@
 <?php
+session_start();
 require_once 'config/db.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+$user_id = $_SESSION['user_id']; // Use the logged-in ID instead of 1!
 
 if (isset($_POST['submit'])) {
     // 1. Get the data from the form
